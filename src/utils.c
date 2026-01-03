@@ -125,3 +125,101 @@ void	free_array(char **arr)
 	}
 	free(arr);
 }
+
+static int	count_words(char const *s, char c)
+{
+	int	count;
+	int	in_word;
+
+	count = 0;
+	in_word = 0;
+	while (*s)
+	{
+		if (*s != c && !in_word)
+		{
+			in_word = 1;
+			count++;
+		}
+		else if (*s == c)
+			in_word = 0;
+		s++;
+	}
+	return (count);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**result;
+	int		word_count;
+	int		i;
+	int		start;
+	int		j;
+
+	if (!s)
+		return (NULL);
+	word_count = count_words(s, c);
+	result = malloc(sizeof(char *) * (word_count + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s[i])
+	{
+		while (s[i] == c)
+			i++;
+		if (!s[i])
+			break ;
+		start = i;
+		while (s[i] && s[i] != c)
+			i++;
+		result[j] = ft_substr(s, start, i - start);
+		if (!result[j])
+		{
+			free_array(result);
+			return (NULL);
+		}
+		j++;
+	}
+	result[j] = NULL;
+	return (result);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
+char	*get_prompt(t_shell *shell)
+{
+	char	*cwd;
+	char	*home;
+	char	*prompt;
+	int		home_len;
+	char	*display_path;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return (ft_strdup("minishell$ "));
+	home = get_env_value("HOME", shell);
+	if (home && ft_strncmp(cwd, home, ft_strlen(home)) == 0)
+	{
+		home_len = ft_strlen(home);
+		if (cwd[home_len] == '\0')
+			display_path = ft_strdup("~");
+		else if (cwd[home_len] == '/')
+			display_path = ft_strjoin("~", cwd + home_len);
+		else
+			display_path = ft_strdup(cwd);
+	}
+	else
+		display_path = ft_strdup(cwd);
+	free(cwd);
+	prompt = ft_strjoin(display_path, "$ ");
+	free(display_path);
+	return (prompt);
+}

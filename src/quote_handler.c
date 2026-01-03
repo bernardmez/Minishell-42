@@ -29,28 +29,39 @@ char	*remove_quotes(char *str, t_quote_state quote_state)
 	char	*result;
 	int		i;
 	int		j;
-	char	quote;
+	int		len;
 
-	if (!str || quote_state == QUOTE_NONE)
-		return (ft_strdup(str));
-	result = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	result = malloc(sizeof(char) * (len + 1));
 	if (!result)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (str[i])
 	{
-		if ((str[i] == '\'' || str[i] == '"'))
+		// Skip quotes based on quote_state
+		if (quote_state == QUOTE_SINGLE && str[i] == '\'')
 		{
-			quote = str[i];
 			i++;
-			while (str[i] && str[i] != quote)
-				result[j++] = str[i++];
-			if (str[i] == quote)
-				i++;
+			continue;
 		}
-		else
-			result[j++] = str[i++];
+		if (quote_state == QUOTE_DOUBLE && str[i] == '"')
+		{
+			i++;
+			continue;
+		}
+		// For QUOTE_NONE, remove both single and double quotes
+		if (quote_state == QUOTE_NONE)
+		{
+			if (str[i] == '\'' || str[i] == '"')
+			{
+				i++;
+				continue;
+			}
+		}
+		result[j++] = str[i++];
 	}
 	result[j] = '\0';
 	return (result);

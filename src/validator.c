@@ -21,6 +21,14 @@ int	validate_syntax(t_token *tokens)
 	}
 	while (current)
 	{
+		// Check for && (not supported, should be syntax error)
+		// Check if value contains && (handles &&, &&&&&, etc.)
+		if (current->type == TOKEN_WORD && current->value
+			&& strstr(current->value, "&&"))
+		{
+			syntax_error("&&");
+			return (0);
+		}
 		if (current->type == TOKEN_PIPE)
 		{
 			if (!current->next || current->next->type == TOKEN_PIPE)
@@ -33,7 +41,10 @@ int	validate_syntax(t_token *tokens)
 		{
 			if (!current->next || current->next->type != TOKEN_WORD)
 			{
-				if (current->next)
+				// If next token is also a redirection (like >> >> or <>), report the redirection token
+				if (current->next && is_redir_token(current->next->type))
+					syntax_error(current->next->value);
+				else if (current->next)
 					syntax_error(current->next->value);
 				else
 					syntax_error("newline");

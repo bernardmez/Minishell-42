@@ -119,7 +119,7 @@ static t_cmd	*parse_simple_cmd(t_token **tokens)
 	{
 		if (current->type == TOKEN_WORD)
 		{
-			cmd->args[i++] = ft_strdup(current->value);
+			cmd->args[i++] = remove_quotes(current->value, current->quote_state);
 			current = current->next;
 		}
 		else if (current->type == TOKEN_REDIR_IN 
@@ -128,7 +128,7 @@ static t_cmd	*parse_simple_cmd(t_token **tokens)
 			|| current->type == TOKEN_REDIR_HEREDOC)
 		{
 			add_redir(&cmd->redirs, create_redir(current->type, 
-				current->next->value));
+				remove_quotes(current->next->value, current->next->quote_state)));
 			current = current->next->next;
 		}
 		else

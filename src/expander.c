@@ -95,17 +95,33 @@ char	*expand_variables(char *str, t_shell *shell, t_quote_state quote)
 		if (str[i] == '$')
 		{
 			var_name = extract_var_name(str, &i);
-			if (ft_strncmp(var_name, "?", 2) == 0)
-				var_value = ft_itoa(shell->last_exit_status);
-			else
-				var_value = ft_strdup(get_env_value(var_name, shell));
-			free(var_name);
-			if (var_value)
+			// If var_name is empty (just $ with nothing after), keep the $
+			if (ft_strlen(var_name) == 0)
 			{
+				temp = result;
+				result = ft_strjoin(result, "$");
+				free(temp);
+				free(var_name);
+			}
+			else if (ft_strncmp(var_name, "?", 2) == 0)
+			{
+				var_value = ft_itoa(shell->last_exit_status);
 				temp = result;
 				result = ft_strjoin(result, var_value);
 				free(temp);
 				free(var_value);
+				free(var_name);
+			}
+			else
+			{
+				var_value = get_env_value(var_name, shell);
+				if (var_value)
+				{
+					temp = result;
+					result = ft_strjoin(result, var_value);
+					free(temp);
+				}
+				free(var_name);
 			}
 		}
 	}
