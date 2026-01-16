@@ -1,0 +1,30 @@
+# Object files
+*.o
+*.a
+objs/
+
+# Executable
+minishell
+
+# OS files
+.DS_Store
+._*
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Debugging
+*.dSYM/
+vgcore.*
+core
+
+# Readline history
+.readline_history
+
+# Temporary files
+*.tmp
+*.temp
