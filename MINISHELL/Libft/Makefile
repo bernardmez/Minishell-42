@@ -6,7 +6,7 @@
 #    By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 21:31:38 by jeid              #+#    #+#              #
-#    Updated: 2026/01/15 21:40:53 by jeid             ###   ########.fr        #
+#    Updated: 2026/01/17 17:26:25 by jeid             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ OBJDIR = objs
 OBJECTS = $(SOURCES:%.c=$(OBJDIR)/%.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I../includes
+CFLAGS = -Wall -Wextra -Werror -fPIC -I../includes
 
 all: $(NAME)
 
