@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:32 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:52:37 by jeid             ###   ########.fr       */
+/*   Updated: 2026/01/26 23:52:08 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,15 @@ void				env_cmd(t_env **env);
 void				exit_minishell(t_cmd **cmd, t_env **env);
 // export.c
 void				my_export(t_cmd **cmd, t_env **env);
+int					check_valid(char *var, t_env **env);
 // heeper_export.c
 void				filter_export(t_cmd **cmd, t_env **env);
+// export_utils.c
+void				print_export_identifier_error(t_env **env,
+						const char *token);
+void				copy_name_before_equal(char *dst, size_t dstsz,
+						const char *arg);
+int					is_assign_valid(char *arg, t_env **env);
 // pwd.c
 void				pwd_cmd(t_env **env);
 // unset.c

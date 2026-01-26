@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jm_eid <jm_eid@student.42.fr>              +#+  +:+       +#+         #
+#    By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 21:32:26 by jeid              #+#    #+#              #
-#    Updated: 2026/01/16 10:00:32 by jm_eid           ###   ########.fr        #
+#    Updated: 2026/01/26 23:52:08 by jeid             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS = -Wall -Wextra -Werror -g -I$(INCDIR) -I$(LIBFTDIR)
 
 SRCS = $(SRCDIR)/main.c \
 	$(SRCDIR)/Builtin/cd.c $(SRCDIR)/Builtin/echo.c $(SRCDIR)/Builtin/env.c $(SRCDIR)/Builtin/exit.c \
-	$(SRCDIR)/Builtin/export.c $(SRCDIR)/Builtin/helper_export.c $(SRCDIR)/Builtin/pwd.c $(SRCDIR)/Builtin/unset.c \
+	$(SRCDIR)/Builtin/export.c $(SRCDIR)/Builtin/helper_export.c $(SRCDIR)/Builtin/export_utils.c $(SRCDIR)/Builtin/pwd.c $(SRCDIR)/Builtin/unset.c \
 	$(SRCDIR)/Execution/executing.c $(SRCDIR)/Execution/helper_execute.c $(SRCDIR)/Execution/helper_execute2.c \
 	$(SRCDIR)/Execution/helper_execute3.c $(SRCDIR)/Execution/helper_execute4.c $(SRCDIR)/Execution/helper_execute5.c \
 	$(SRCDIR)/Execution/helper_redirections.c $(SRCDIR)/Execution/redirections.c $(SRCDIR)/Execution/here_doc.c \

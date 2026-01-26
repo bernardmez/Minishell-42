@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:30:07 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/17 17:24:42 by jeid             ###   ########.fr       */
+/*   Updated: 2026/01/26 23:34:28 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
 	g_signal = 130;
-	exit(0);
+	write(STDOUT_FILENO, "\n", 1);
+	exit(130);
 }
 
 void	signal_heredoc(void)
@@ -57,30 +54,40 @@ char	**inside_while(t_env **env, char *eof, char **input_line, int fd)
 	return (input_line);
 }
 
-void	handle_heredoc(t_env **env, char *eof)
+static void	heredoc_child_process(t_env **env, char *eof)
 {
 	char	**input_line;
 	int		fd;
-	int		pid;
 
-	fd = 0;
+	if (!eof)
+		exit(STDIN_FILENO);
+	fd = open("/tmp/heredoc_input", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+		ft_error(env, "Error opening temporary file for heredoc", 1, false);
+	input_line = malloc(sizeof(char *) * 2);
+	input_line[1] = NULL;
+	input_line = inside_while(env, eof, input_line, fd);
+	(*env)->here_doc = FALSE;
+	free(input_line);
+	exit(0);
+}
+
+void	handle_heredoc(t_env **env, char *eof)
+{
+	int		pid;
+	int		status;
+
 	pid = fork();
 	if (pid == -1)
 		ft_error(env, "error fork in heredoc", 0, 0);
 	if (pid == 0)
-	{
-		if (!eof)
-			exit(STDIN_FILENO);
-		fd = open("/tmp/heredoc_input", O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd < 0)
-			ft_error(env, "Error opening temporary file for heredoc", 1, false);
-		input_line = malloc(sizeof(char *) * 2);
-		input_line[1] = NULL;
-		input_line = inside_while(env, eof, input_line, fd);
-		(*env)->here_doc = FALSE;
-		free(input_line);
-		exit(0);
-	}
+		heredoc_child_process(env, eof);
 	else
-		wait(NULL);
+	{
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
+			g_signal = 130;
+		signals();
+	}
 }
