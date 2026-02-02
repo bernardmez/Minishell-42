@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:02 by jeid              #+#    #+#             */
-/*   Updated: 2026/02/02 22:45:36 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 23:49:39 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,22 @@ void	update_redirections(t_cmd **cmd, t_redir *new_redirection)
 	return ;
 }
 
+static void	setup_heredoc(t_redir *redir, t_env **env)
+{
+	char		*num;
+	static int	heredoc_count;
+
+	num = ft_itoa(heredoc_count++);
+	redir->heredoc_file = ft_strjoin("/tmp/heredoc_", num);
+	free(num);
+	handle_heredoc(env, redir, !(*env)->quote_indentifier);
+}
+
 int	redirection_param(t_cmd **cmd, char *prompt, int type, t_env *env)
 {
-	char	*filename;
-	int		len;
-	t_redir	*new_redirection;
+	char		*filename;
+	int			len;
+	t_redir		*new_redirection;
 
 	filename = skip_to_c(prompt, ' ', env);
 	len = filename - prompt;
@@ -54,9 +65,10 @@ int	redirection_param(t_cmd **cmd, char *prompt, int type, t_env *env)
 	new_redirection->filename = filename;
 	new_redirection->type = type;
 	new_redirection->next = NULL;
-	update_redirections(cmd, new_redirection);
+	new_redirection->heredoc_file = NULL;
 	if (type == 3)
-		handle_heredoc(&env, filename);
+		setup_heredoc(new_redirection, &env);
+	update_redirections(cmd, new_redirection);
 	return (len);
 }
 
@@ -91,30 +103,4 @@ char	*skip_to_c(char *s, char c, t_env *env)
 		s++;
 	}
 	return (s);
-}
-
-/*
-	@EXAMPLE "-FLAG1"test  -ARG1 -ARG2 -FLAG2
-
-	Skip s to find space taking quotes into considerations
-		-calculate how many chars skipped
-			"-FLAG1"test = 12 chars
-		-dequote the result and copy it
-	send new flag to the @upate_flags functions to concat new flags tokens
-
-	@RETURN 12 chars(how many letter we read from
-	prompt to be able to skip them with prompt+=len)
-*/
-int	copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env)
-{
-	char	*flag;
-	int		len;
-
-	flag = skip_to_c(prompt, ' ', env);
-	len = flag - prompt;
-	env->flag = TRUE;
-	flag = dequotencpy(i, len, prompt, &env);
-	env->flag = FALSE;
-	struct_update_flags(cmd, flag, (*cmd)->flag);
-	return (len);
 }

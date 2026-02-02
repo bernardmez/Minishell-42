@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:31:21 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:31:22 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 23:47:47 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	struct_free_redirections(t_redir *redirections)
 	{
 		temp = redirections;
 		free(temp->filename);
+		if (temp->heredoc_file)
+			free(temp->heredoc_file);
 		redirections = redirections->next;
 		free(temp);
 	}

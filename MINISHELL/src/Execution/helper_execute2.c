@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:29:45 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/26 23:57:47 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/03 00:15:42 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,4 @@ void	handle_parent_process(t_pipe *pipe_fd, t_cmd **cmd)
 		close(pipe_fd->fd[1]);
 		pipe_fd->saved_fd = pipe_fd->fd[0];
 	}
-}
-
-void	wait_for_children(pid_t pid, t_env **env, t_cmd **cmd)
-{
-	int	status;
-
-	(void)cmd;
-	ignoresignals();
-	waitpid(pid, &status, 0);
-	signals();
-	if (WIFEXITED(status))
-		(*env)->exit_code = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		(*env)->exit_code = 128 + WTERMSIG(status);
-	while (wait(&status) > 0)
-		;
 }

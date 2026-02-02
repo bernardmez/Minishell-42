@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:30:13 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:30:14 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 23:47:47 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	handle_read_file(t_env **env, t_redir *redir, bool here_doc)
 	int	fd;
 
 	if (here_doc)
-		fd = open("/tmp/heredoc_input", O_RDONLY);
+		fd = open(redir->heredoc_file, O_RDONLY);
 	else
 		fd = open(redir->filename, O_RDONLY);
 	if (fd == -1)

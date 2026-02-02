@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:32 by jeid              #+#    #+#             */
-/*   Updated: 2026/02/02 23:05:40 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/03 00:15:42 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_env
 	bool			exit_status;
 	bool			expanding;
 	bool			here_doc;
+	bool			heredoc_expand;
 	bool			flag;
 	struct s_env	*next;
 }					t_env;
@@ -69,6 +70,7 @@ typedef struct s_redir
 {
 	int				type;
 	char			*filename;
+	char			*heredoc_file;
 	struct s_redir	*next;
 }					t_redir;
 
@@ -120,7 +122,7 @@ void				check_cmd(t_cmd **cmd, t_env **env);
 void				executing(t_cmd **cmd, t_env **env);
 int					execute(char *path, t_cmd **cmd, t_env **env);
 t_fd				handle_redirection(t_env **env, t_cmd *cmd);
-void				handle_heredoc(t_env **env, char *eof);
+void				handle_heredoc(t_env **env, t_redir *redir, bool expand);
 char				*relative_path(t_cmd **cmd, t_env **env);
 // helper_execute.c
 char				*find_path(char *cmd, t_env **env);
@@ -132,11 +134,13 @@ void				handle_child_process(t_cmd **cmd, t_pipe pipe_fd,
 						t_env **env);
 pid_t				create_process(t_env **env);
 int					create_pipe(t_env **env, int fd[2]);
-void				wait_for_children(pid_t pid, t_env **env, t_cmd **cmd);
 
 // helper_execute5.c
 void				increment_shlvl(t_env **env);
 void				inside_fork(t_fork pipe, t_env **env, t_cmd **cmd);
+
+// helper_execute6.c
+void				wait_for_children(pid_t pid, t_env **env, t_cmd **cmd);
 
 // helper_redirections.c
 void				restore_original_fds(int original_stdin,
@@ -237,6 +241,7 @@ int					expansion_quotes(int index, char *s, char **dest,
 int					redirection_param(t_cmd **cmd, char *prompt, int type,
 						t_env *env);
 char				*skip_to_c(char *s, char c, t_env *env);
+// helper_functions2.c
 int					copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env);
 // helper_quote_check.c
 int					find_arg_end_echo(char *prompt, char **argument);

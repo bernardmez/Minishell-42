@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:30:07 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/26 23:34:28 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 23:47:47 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**inside_while(t_env **env, char *eof, char **input_line, int fd)
 			free(input_line[0]);
 			break ;
 		}
-		if ((*env)->quote_indentifier == FALSE)
+		if ((*env)->heredoc_expand == TRUE)
 			input_line = expansion(*env, input_line);
 		if (is_delimiter(input_line[0], eof))
 		{
@@ -54,34 +54,35 @@ char	**inside_while(t_env **env, char *eof, char **input_line, int fd)
 	return (input_line);
 }
 
-static void	heredoc_child_process(t_env **env, char *eof)
+static void	heredoc_child_process(t_env **env, t_redir *redir)
 {
 	char	**input_line;
 	int		fd;
 
-	if (!eof)
+	if (!redir->filename)
 		exit(STDIN_FILENO);
-	fd = open("/tmp/heredoc_input", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(redir->heredoc_file, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 		ft_error(env, "Error opening temporary file for heredoc", 1, false);
 	input_line = malloc(sizeof(char *) * 2);
 	input_line[1] = NULL;
-	input_line = inside_while(env, eof, input_line, fd);
+	input_line = inside_while(env, redir->filename, input_line, fd);
 	(*env)->here_doc = FALSE;
 	free(input_line);
 	exit(0);
 }
 
-void	handle_heredoc(t_env **env, char *eof)
+void	handle_heredoc(t_env **env, t_redir *redir, bool expand)
 {
 	int		pid;
 	int		status;
 
+	(*env)->heredoc_expand = expand;
 	pid = fork();
 	if (pid == -1)
 		ft_error(env, "error fork in heredoc", 0, 0);
 	if (pid == 0)
-		heredoc_child_process(env, eof);
+		heredoc_child_process(env, redir);
 	else
 	{
 		signal(SIGINT, SIG_IGN);

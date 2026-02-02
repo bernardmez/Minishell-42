@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error.c                                         :+:      :+:    :+:   */
+/*   helper_functions2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/15 21:30:28 by jeid              #+#    #+#             */
-/*   Updated: 2026/02/03 00:01:10 by jeid             ###   ########.fr       */
+/*   Created: 2026/02/02 23:50:00 by jeid              #+#    #+#             */
+/*   Updated: 2026/02/02 23:49:49 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_error(t_env **env, char *errmessage, int error_code, int fork)
+int	copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env)
 {
-	if (errmessage && *errmessage)
-		printf("%s\n", errmessage);
-	(*env)->exit_status = 1;
-	if (fork)
-		exit(error_code);
-	(*env)->exit_code = error_code;
+	char	*flag;
+	int		len;
+
+	flag = skip_to_c(prompt, ' ', env);
+	len = flag - prompt;
+	env->flag = TRUE;
+	flag = dequotencpy(i, len, prompt, &env);
+	env->flag = FALSE;
+	struct_update_flags(cmd, flag, (*cmd)->flag);
+	return (len);
 }
