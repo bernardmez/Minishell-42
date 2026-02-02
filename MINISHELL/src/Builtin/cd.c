@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:28:45 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:28:46 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 23:05:40 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	cd_cmd(t_cmd **cmd, t_env **env)
 {
 	char	*old_pwd;
 	char	*current_pwd;
+	char	*path;
 
 	if (!cmd || !(*cmd))
 		return ;
@@ -70,11 +71,12 @@ void	cd_cmd(t_cmd **cmd, t_env **env)
 	if (old_pwd)
 		free(old_pwd);
 	if ((*cmd)->arg == NULL || (*cmd)->arg[0] == NULL)
-	{
-		if (chdir(getenv("HOME")) == -1)
-			ft_error(env, "bash: cd: getcwd failed", 1, false);
-	}
-	else if (chdir((*cmd)->arg[0]) == -1)
+		path = getenv("HOME");
+	else if ((*cmd)->arg[0][0] == '~')
+		path = getenv("HOME");
+	else
+		path = (*cmd)->arg[0];
+	if (chdir(path) == -1)
 		ft_error(env, "error no such file or directiory", 1, false);
 	update_pwd(cmd, env);
 }

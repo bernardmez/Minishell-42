@@ -6,11 +6,17 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:02 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:41:26 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 22:45:36 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*skip_quote_reset(char *outer_quote, char quote, char *s)
+{
+	*outer_quote = '\0';
+	return (skip_inside(quote, s));
+}
 
 void	update_redirections(t_cmd **cmd, t_redir *new_redirection)
 {
@@ -67,16 +73,16 @@ char	*skip_to_c(char *s, char c, t_env *env)
 	outer_quote = '\0';
 	while (*s != '\0' && *s != c)
 	{
-		if ((c != '|' && c != '$') && redirections(*s, *(s + 1)) != 0)
-			break ;
 		if (isquote(*s) && outer_quote == '\0')
 			outer_quote = *s;
 		else if (*s == outer_quote)
 			outer_quote = '\0';
+		if ((c != '|' && c != '$') && outer_quote == '\0' && redirections(*s,
+				*(s + 1)) != 0)
+			break ;
 		if (!env->expanding && isquote(*s))
-			s = skip_inside(*s, s + 1);
-		else if (env->expanding && (*s == '\'' && outer_quote == '\'')
-			&& env->here_doc == FALSE)
+			s = skip_quote_reset(&outer_quote, *s, s + 1);
+		else if (env->expanding && *s == '\'' && env->here_doc == FALSE)
 			s = skip_inside(*s, s + 1);
 		if ((env->here_doc || env->expanding) && s == NULL)
 			return (NULL);

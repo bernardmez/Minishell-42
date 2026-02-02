@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:14 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:41:39 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 23:05:40 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,12 @@ char	*flags_token(t_cmd **cmd, char *prompt, t_env *env)
 	{
 		prompt = skip_spaces(prompt);
 		i = 0;
-		if (*prompt == '\0' || (ft_strncmp((*cmd)->command, "echo", 1) == 0
-				&& (*cmd)->flag != NULL))
+		if (*prompt == '\0' || redirections(*prompt, *(prompt + 1)))
 			break ;
-		if (redirections(*prompt, *(prompt + 1)))
-			break ;
-		if (prompt[i] == '-')
+		if (prompt[i] == '-' && !is_echo_with_flag(*cmd))
 			prompt += copy_flag(cmd, i + 1, prompt, env);
-		else if (isquote(prompt[i]) && prompt[i + 1] == '-')
+		else if (isquote(prompt[i]) && prompt[i + 1] == '-'
+			&& !is_echo_with_flag(*cmd))
 			prompt += copy_flag(cmd, i + 2, prompt, env);
 		else
 		{

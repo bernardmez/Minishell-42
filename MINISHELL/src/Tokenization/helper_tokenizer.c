@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:06 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:41:34 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 22:55:41 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,7 @@ int	copy_args(t_cmd **cmd, char *prompt, t_env *env)
 	len = 0;
 	if (ft_strncmp((*cmd)->command, "echo", 4) == 0)
 	{
-		argument = skip_spaces(prompt);
-		while (*argument != '\0' && !redirections(*argument, *(argument + 1)))
-			argument++;
-		len = argument - prompt;
+		len = find_arg_end_echo(prompt, &argument);
 		argument = dequotencpy(0, len, prompt, &env);
 		struct_update_args(cmd, argument);
 	}

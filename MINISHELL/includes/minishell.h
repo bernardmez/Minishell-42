@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:32 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/26 23:52:08 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/02 23:05:40 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,9 @@ int					redirection_param(t_cmd **cmd, char *prompt, int type,
 						t_env *env);
 char				*skip_to_c(char *s, char c, t_env *env);
 int					copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env);
+// helper_quote_check.c
+int					find_arg_end_echo(char *prompt, char **argument);
+int					is_echo_with_flag(t_cmd *cmd);
 // helper_tokenizer.c
 char				*skip_inside(char quote, char *s);
 char				*dequotencpy(int start, int end, char *s, t_env **env);
