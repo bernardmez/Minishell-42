@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:29:49 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:29:50 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/09 20:30:01 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,7 @@ int	execute(char *path, t_cmd **cmd, t_env **env)
 	{
 		free_string_array(cenvp);
 		free(args);
-		ft_error(env, "42-minishell: error command not found", 126, false);
-		return (-1);
+		return (execve_error_bash(path, env));
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:32 by jeid              #+#    #+#             */
-/*   Updated: 2026/02/03 00:15:42 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/09 20:43:56 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ typedef struct s_pipe
 // cd.c
 void				cd_cmd(t_cmd **cmd, t_env **env);
 // echo.c
-void				echo_cmd(t_cmd **cmd);
+void				echo_cmd(t_cmd **cmd, t_env **env);
 // env.c
 void				env_cmd(t_env **env);
 // exit.c
@@ -254,5 +254,7 @@ int					redirections(char c1, char c2);
 char				**expansion(t_env *env, char **segments);
 char				*check_redir(int type, t_env **env, t_cmd **cmd,
 						char *prompt);
+
+int					execve_error_bash(char *path, t_env **env);
 
 #endif

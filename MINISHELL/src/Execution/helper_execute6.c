@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 00:15:00 by jeid              #+#    #+#             */
-/*   Updated: 2026/02/03 00:15:42 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/09 20:44:39 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,21 @@ void	wait_for_children(pid_t pid, t_env **env, t_cmd **cmd)
 	}
 	g_signal = 0;
 	signals();
+}
+
+int	execve_error_bash(char *path, t_env **env)
+{
+	if (ft_strchr(path, '/'))
+	{
+		perror(path);
+		ft_error(env, "", 127, false);
+		exit(127);
+	}
+	else
+	{
+		printf("%s: command not found\n", path);
+		ft_error(env, "", 127, false);
+		exit(127);
+	}
+	return (-1);
 }

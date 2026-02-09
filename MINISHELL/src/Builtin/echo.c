@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:28:52 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:41:52 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/09 21:22:04 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	check_flag(char *flag)
 	return (FALSE);
 }
 
-void	echo_cmd(t_cmd **cmd)
+void	echo_cmd(t_cmd **cmd, t_env **env)
 {
 	bool	new_line;
 
@@ -56,9 +56,13 @@ void	echo_cmd(t_cmd **cmd)
 	if ((*cmd)->arg == NULL && new_line)
 	{
 		printf("\n");
+		if (env && *env)
+			(*env)->exit_code = 0;
 		return ;
 	}
 	display(cmd);
 	if (new_line)
 		printf("\n");
+	if (env && *env)
+		(*env)->exit_code = 0;
 }

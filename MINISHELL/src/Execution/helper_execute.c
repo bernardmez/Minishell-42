@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:29:39 by jeid              #+#    #+#             */
-/*   Updated: 2026/01/15 21:29:40 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/09 20:43:56 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*find_variable(char **envp)
 int	built_in_functions(t_cmd **cmd, t_env **env)
 {
 	if (ft_strcmp((*cmd)->command, "echo") == 0)
-		echo_cmd(cmd);
+		echo_cmd(cmd, env);
 	else if (ft_strcmp((*cmd)->command, "cd") == 0)
 		cd_cmd(cmd, env);
 	else if (ft_strcmp((*cmd)->command, "pwd") == 0)

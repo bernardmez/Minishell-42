@@ -6,7 +6,7 @@
 #    By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/15 21:32:26 by jeid              #+#    #+#              #
-#    Updated: 2026/02/03 00:15:42 by jeid             ###   ########.fr        #
+#    Updated: 2026/02/09 19:07:29 by jeid             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBJDIR = objs
 
 LIBFT = $(LIBFTDIR)/libft.a
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -I$(INCDIR) -I$(LIBFTDIR)
 
 SRCS = $(SRCDIR)/main.c \
@@ -62,5 +62,11 @@ fclean: clean
 	@echo "✓ Full clean complete!"
 
 re: fclean all
+
+leak: all
+	valgrind --leak-check=full --track-fds=yes --trace-children=yes ./$(NAME)
+
+bash: all
+	valgrind --leak-check=full --track-fds=yes --trace-children=yes bash
 
 .PHONY: all clean fclean re

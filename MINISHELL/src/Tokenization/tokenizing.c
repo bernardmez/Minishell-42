@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bmazraan <bmazraan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 21:32:14 by jeid              #+#    #+#             */
-/*   Updated: 2026/02/09 16:05:44 by bmazraan         ###   ########.fr       */
+/*   Updated: 2026/02/09 20:09:22 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,12 @@ char	*flags_token(t_cmd **cmd, char *prompt, t_env *env)
 		i = 0;
 		if (*prompt == '\0' || redirections(*prompt, *(prompt + 1)))
 			break ;
-		if (prompt[i] == '-' && !is_echo_with_flag(*cmd))
+		if (prompt[i] == '-' && !is_echo_with_flag(*cmd)
+			&& ft_strncmp((*cmd)->command, "exit", 4) != 0)
 			prompt += copy_flag(cmd, i + 1, prompt, env);
 		else if (isquote(prompt[i]) && prompt[i + 1] == '-'
-			&& !is_echo_with_flag(*cmd))
+			&& !is_echo_with_flag(*cmd)
+			&& ft_strncmp((*cmd)->command, "exit", 4) != 0)
 			prompt += copy_flag(cmd, i + 2, prompt, env);
 		else
 		{
@@ -135,6 +137,7 @@ t_cmd	*tokenizing(char *prompt, t_env *env)
 	t_cmd	*new_cmd;
 	int		type;
 
+	type = 0;
 	new_cmd = NULL;
 	if (*prompt == '\0' || prompt == NULL)
 		return (ft_error(&env, "parse error :invalid command", 2, FALSE), NULL);
