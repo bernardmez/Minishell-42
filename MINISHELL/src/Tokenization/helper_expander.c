@@ -48,6 +48,11 @@ char	*expand(t_env *env, char *key)
 
 	key++;
 	rawvar = NULL;
+	if (*key == '\0' || (!ft_isalnum(*key) && *key != '_' && *key != '?'))
+	{
+		expanded = ft_strjoin("\x01", key);
+		return (expanded);
+	}
 	if (*key >= '0' && *key <= '9')
 	{
 		key++;
@@ -65,6 +70,21 @@ char	*expand(t_env *env, char *key)
 	expanded = ft_strjoin(value, key);
 	free(value);
 	return (expanded);
+}
+
+static void	restore_standalone_dollars(char **str)
+{
+	int		i;
+
+	if (!str || !*str)
+		return ;
+	i = 0;
+	while ((*str)[i])
+	{
+		if ((*str)[i] == '\x01')
+			(*str)[i] = '$';
+		i++;
+	}
 }
 
 void	expansion_mechanism(t_expand *expander, t_env *env)
@@ -87,4 +107,5 @@ void	expansion_mechanism(t_expand *expander, t_env *env)
 		free(expander->prev_section);
 		free(expander->var_value);
 	}
+	restore_standalone_dollars(&expander->next_section);
 }
