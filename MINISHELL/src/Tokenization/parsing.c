@@ -51,16 +51,46 @@ t_cmd	*split_commands(char *input, t_env *env)
 	return (cmd);
 }
 
+static int	count_heredocs(char *input)
+{
+	int		count;
+	char	quote;
+
+	count = 0;
+	quote = '\0';
+	while (*input)
+	{
+		if (isquote(*input) && quote == '\0')
+			quote = *input;
+		else if (*input == quote)
+			quote = '\0';
+		if (quote == '\0' && *input == '<' && *(input + 1) == '<')
+		{
+			count++;
+			input++;
+		}
+		input++;
+	}
+	return (count);
+}
+
 t_cmd	*parsing(char *input, t_env **env)
 {
 	t_cmd	*cmd;
 	char	*n;
 	int		i;
 
+	reset_heredoc_count();
 	cmd = NULL;
 	input = skip_spaces(input);
 	if (!input || *input == '\0')
 		return (NULL);
+	if (count_heredocs(input) > 16)
+	{
+		write(2, "bash: maximum here-document count exceeded\n", 44);
+		(*env)->exit_code = 2;
+		return (NULL);
+	}
 	i = 0;
 	while (input[i])
 	{

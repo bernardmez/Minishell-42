@@ -30,7 +30,8 @@ SRCS = $(SRCDIR)/main.c \
 	$(SRCDIR)/Execution/helper_redirections.c $(SRCDIR)/Execution/redirections.c $(SRCDIR)/Execution/here_doc.c \
 	$(SRCDIR)/System/set_env.c $(SRCDIR)/System/signals.c \
 	$(SRCDIR)/Tokenization/tokenizing.c $(SRCDIR)/Tokenization/parsing.c $(SRCDIR)/Tokenization/helper_tokenizer.c \
-	$(SRCDIR)/Tokenization/helper_functions.c $(SRCDIR)/Tokenization/helper_functions2.c $(SRCDIR)/Tokenization/helper_expander.c $(SRCDIR)/Tokenization/helper_quote_check.c
+	$(SRCDIR)/Tokenization/helper_functions.c $(SRCDIR)/Tokenization/helper_functions2.c $(SRCDIR)/Tokenization/helper_expander.c \
+	$(SRCDIR)/Tokenization/expand_helpers.c $(SRCDIR)/Tokenization/helper_quote_check.c
 OBJECTS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 all: $(NAME)

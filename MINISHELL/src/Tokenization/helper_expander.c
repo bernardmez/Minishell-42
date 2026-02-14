@@ -47,17 +47,9 @@ char	*expand(t_env *env, char *key)
 	int		i;
 
 	key++;
-	rawvar = NULL;
-	if (*key == '\0' || (!ft_isalnum(*key) && *key != '_' && *key != '?'))
-	{
-		expanded = ft_strjoin("\x01", key);
+	expanded = handle_expand_special_cases(key);
+	if (expanded)
 		return (expanded);
-	}
-	if (*key >= '0' && *key <= '9')
-	{
-		key++;
-		return (ft_strdup(key));
-	}
 	i = 0;
 	while (key[i] != '\0' && (ft_isalnum(key[i]) || key[i] == '_'))
 		i++;

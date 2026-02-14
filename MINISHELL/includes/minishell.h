@@ -24,6 +24,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include "../src/Tokenization/expand_helpers.h"
 
 extern int			g_signal;
 
@@ -138,6 +139,7 @@ int					create_pipe(t_env **env, int fd[2]);
 // helper_execute5.c
 void				increment_shlvl(t_env **env);
 void				inside_fork(t_fork pipe, t_env **env, t_cmd **cmd);
+char				*get_last_arg(t_cmd *cmd);
 
 // helper_execute6.c
 void				wait_for_children(pid_t pid, t_env **env, t_cmd **cmd);
@@ -241,6 +243,7 @@ int					expansion_quotes(int index, char *s, char **dest,
 int					redirection_param(t_cmd **cmd, char *prompt, int type,
 						t_env *env);
 char				*skip_to_c(char *s, char c, t_env *env);
+void				reset_heredoc_count(void);
 // helper_functions2.c
 int					copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env);
 // helper_quote_check.c
