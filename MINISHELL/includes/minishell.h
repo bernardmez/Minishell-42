@@ -247,6 +247,7 @@ int					redirection_param(t_cmd **cmd, char *prompt, int type,
 char				*skip_to_c(char *s, char c, t_env *env);
 void				reset_heredoc_count(void);
 // helper_functions2.c
+void				setup_heredoc(t_redir *redir, t_env **env);
 int					copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env);
 // helper_quote_check.c
 int					find_arg_end_echo(char *prompt, char **argument);
