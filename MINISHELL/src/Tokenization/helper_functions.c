@@ -34,33 +34,6 @@ void	update_redirections(t_cmd **cmd, t_redir *new_redirection)
 	return ;
 }
 
-static int	*get_heredoc_count(void)
-{
-	static int	heredoc_count = 0;
-
-	return (&heredoc_count);
-}
-
-void	reset_heredoc_count(void)
-{
-	int	*count;
-
-	count = get_heredoc_count();
-	*count = 0;
-}
-
-static void	setup_heredoc(t_redir *redir, t_env **env)
-{
-	char	*num;
-	int		*heredoc_count;
-
-	heredoc_count = get_heredoc_count();
-	num = ft_itoa((*heredoc_count)++);
-	redir->heredoc_file = ft_strjoin("/tmp/heredoc_", num);
-	free(num);
-	handle_heredoc(env, redir, !(*env)->quote_indentifier);
-}
-
 int	redirection_param(t_cmd **cmd, char *prompt, int type, t_env *env)
 {
 	char		*filename;

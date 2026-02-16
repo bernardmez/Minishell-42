@@ -74,32 +74,37 @@ static int	count_heredocs(char *input)
 	return (count);
 }
 
-t_cmd	*parsing(char *input, t_env **env)
+static int	validate_input(char *input, t_env **env)
 {
-	t_cmd	*cmd;
 	char	*n;
 	int		i;
 
-	reset_heredoc_count();
-	cmd = NULL;
-	input = skip_spaces(input);
-	if (!input || *input == '\0')
-		return (NULL);
 	if (count_heredocs(input) > 16)
-	{
-		write(2, "bash: maximum here-document count exceeded\n", 44);
-		(*env)->exit_code = 2;
-		return (NULL);
-	}
+		return (write(2, "bash: maximum here-document count exceeded\n",
+				44), (*env)->exit_code = 2, 0);
 	i = 0;
 	while (input[i])
 	{
 		n = skip_spaces(input + (i + 1));
 		if (input[0] == '|' || (i > 0 && ((*n == '|' || *n == '\0')
 					&& input[i] == '|')))
-			return (ft_error(env, "parse error near `|'", 2, false), NULL);
+			return (ft_error(env, "parse error near `|'", 2, false), 0);
 		i++;
 	}
+	return (1);
+}
+
+t_cmd	*parsing(char *input, t_env **env)
+{
+	t_cmd	*cmd;
+
+	reset_heredoc_count();
+	cmd = NULL;
+	input = skip_spaces(input);
+	if (!input || *input == '\0')
+		return (NULL);
+	if (!validate_input(input, env))
+		return (NULL);
 	if (skip_to_c(input, '\0', *env) == NULL)
 		return (ft_error(env, "parse error unmatched quotes`", 2, false), NULL);
 	if ((*env)->exit_status != 1)
