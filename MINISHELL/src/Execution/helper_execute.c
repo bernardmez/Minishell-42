@@ -38,3 +38,23 @@ int	built_in_functions(t_cmd **cmd, t_env **env)
 		return (1);
 	return (0);
 }
+
+pid_t	execute_pipeline_loop(t_cmd **cmd, t_pipe *pipe_fd,
+	t_env **env, t_cmd **last_cmd)
+{
+	pid_t	pid;
+
+	while (*cmd != NULL)
+	{
+		if ((*cmd)->next != NULL)
+			create_pipe(env, pipe_fd->fd);
+		pid = create_process(env);
+		if (pid == 0)
+			handle_child_process(cmd, *pipe_fd, env);
+		else
+			handle_parent_process(pipe_fd, cmd);
+		*last_cmd = *cmd;
+		cmd = &(*cmd)->next;
+	}
+	return (pid);
+}

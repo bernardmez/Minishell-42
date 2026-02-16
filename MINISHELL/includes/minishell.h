@@ -128,6 +128,8 @@ char				*relative_path(t_cmd **cmd, t_env **env);
 // helper_execute.c
 char				*find_path(char *cmd, t_env **env);
 int					built_in_functions(t_cmd **cmd, t_env **env);
+pid_t				execute_pipeline_loop(t_cmd **cmd, t_pipe *pipe_fd,
+						t_env **env, t_cmd **last_cmd);
 
 // helper_execute2.c
 void				handle_parent_process(t_pipe *pipe_fd, t_cmd **cmd);

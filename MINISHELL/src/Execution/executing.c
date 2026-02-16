@@ -90,18 +90,7 @@ void	executing(t_cmd **cmd, t_env **env)
 	}
 	pipe_fd.saved_fd = dup(STDIN_FILENO);
 	last_cmd = NULL;
-	while (*cmd != NULL)
-	{
-		if ((*cmd)->next != NULL)
-			create_pipe(env, pipe_fd.fd);
-		pid = create_process(env);
-		if (pid == 0)
-			handle_child_process(cmd, pipe_fd, env);
-		else
-			handle_parent_process(&pipe_fd, cmd);
-		last_cmd = *cmd;
-		cmd = &(*cmd)->next;
-	}
+	pid = execute_pipeline_loop(cmd, &pipe_fd, env, &last_cmd);
 	wait_for_children(pid, env, cmd);
 	if (last_cmd)
 		set_env("_", get_last_arg(last_cmd), env);
