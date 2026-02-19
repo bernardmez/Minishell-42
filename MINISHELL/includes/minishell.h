@@ -80,6 +80,7 @@ typedef struct s_cmd
 	char			*command;
 	char			**arg;
 	char			*flag;
+	char			*last_token;
 	int				arg_number;
 	t_redir			*redirections;
 	struct s_cmd	*next;
@@ -248,6 +249,7 @@ char				*skip_to_c(char *s, char c, t_env *env);
 void				reset_heredoc_count(void);
 // helper_functions2.c
 void				setup_heredoc(t_redir *redir, t_env **env);
+void				update_last_token(t_cmd **cmd, char *prompt, int len);
 int					copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env);
 // helper_quote_check.c
 int					find_arg_end_echo(char *prompt, char **argument);

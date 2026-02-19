@@ -58,18 +58,9 @@ void	inside_fork(t_fork pipe, t_env **env, t_cmd **cmd)
 
 char	*get_last_arg(t_cmd *cmd)
 {
-	int	i;
-
 	if (!cmd || !cmd->command)
 		return ("");
-	if (cmd->flag && *cmd->flag)
-		return (cmd->flag);
-	if (!cmd->arg)
-		return (cmd->command);
-	i = 0;
-	while (cmd->arg[i])
-		i++;
-	if (i > 0)
-		return (cmd->arg[i - 1]);
+	if (cmd->last_token)
+		return (cmd->last_token);
 	return (cmd->command);
 }

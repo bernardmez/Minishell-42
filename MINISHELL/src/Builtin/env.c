@@ -20,11 +20,8 @@ void	env_cmd(t_env **env)
 	set_env("_", "/usr/bin/env", env);
 	while (current)
 	{
-		printf("%s=", current->variable_name);
 		if (current->value)
-			printf("%s\n", current->value);
-		else
-			printf("\n");
+			printf("%s=%s\n", current->variable_name, current->value);
 		current = current->next;
 	}
 	return ;

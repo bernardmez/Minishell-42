@@ -33,10 +33,10 @@ void	start_engine(t_env *env)
 	{
 		env->exit_status = 0;
 		input = readline(PROMPT);
-		if (input == NULL)
-			handle_eof(&env);
 		if (g_signal == 130)
 			env->exit_code = g_signal;
+		if (input == NULL)
+			handle_eof(&env);
 		g_signal = 0;
 		add_history(input);
 		process_input(input, &env);

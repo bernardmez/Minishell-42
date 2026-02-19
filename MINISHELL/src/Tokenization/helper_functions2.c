@@ -39,6 +39,22 @@ void	setup_heredoc(t_redir *redir, t_env **env)
 	handle_heredoc(env, redir, !(*env)->quote_indentifier);
 }
 
+void	update_last_token(t_cmd **cmd, char *prompt, int len)
+{
+	int	last_start;
+
+	free((*cmd)->last_token);
+	if (ft_strncmp((*cmd)->command, "echo", 4) == 0)
+	{
+		last_start = len;
+		while (last_start > 0 && prompt[last_start - 1] != ' ')
+			last_start--;
+		(*cmd)->last_token = ft_strndup(prompt + last_start, len - last_start);
+	}
+	else
+		(*cmd)->last_token = ft_strndup(prompt, len);
+}
+
 int	copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env)
 {
 	char	*flag;
@@ -50,5 +66,7 @@ int	copy_flag(t_cmd **cmd, int i, char *prompt, t_env *env)
 	flag = dequotencpy(i, len, prompt, &env);
 	env->flag = FALSE;
 	struct_update_flags(cmd, flag, (*cmd)->flag);
+	free((*cmd)->last_token);
+	(*cmd)->last_token = ft_strndup(prompt, len);
 	return (len);
 }

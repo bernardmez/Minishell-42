@@ -106,6 +106,7 @@ int	copy_args(t_cmd **cmd, char *prompt, t_env *env)
 			return (free(argument), len);
 		struct_update_args(cmd, argument);
 	}
+	update_last_token(cmd, prompt, len);
 	return (len);
 }
 

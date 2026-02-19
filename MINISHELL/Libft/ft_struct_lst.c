@@ -20,6 +20,7 @@ t_cmd	*struct_create_list(char *command, t_cmd *new_cmd)
 	new_cmd->command = command;
 	new_cmd->arg = NULL;
 	new_cmd->flag = NULL;
+	new_cmd->last_token = NULL;
 	new_cmd->arg_number = 0;
 	new_cmd->next = NULL;
 	new_cmd->redirections = NULL;
@@ -76,6 +77,7 @@ void	struct_free_cmd(t_cmd *cmd)
 		temp = cmd->next;
 		free(cmd->command);
 		free(cmd->flag);
+		free(cmd->last_token);
 		if (cmd->arg)
 			free_split(cmd->arg);
 		if (cmd->redirections)

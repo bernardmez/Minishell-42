@@ -6,7 +6,7 @@
 /*   By: jeid <jeid@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 00:15:00 by jeid              #+#    #+#             */
-/*   Updated: 2026/02/14 18:45:54 by jeid             ###   ########.fr       */
+/*   Updated: 2026/02/19 19:34:06 by jeid             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ void	wait_for_children(pid_t pid, t_env **env, t_cmd **cmd)
 		sigint = 1;
 	handle_exit_status(status, env, &sigint);
 	if (sigint || g_signal == 130)
-	{
 		write(1, "\n", 1);
-		(*env)->exit_code = 130;
-	}
 	g_signal = 0;
 	signals();
 }

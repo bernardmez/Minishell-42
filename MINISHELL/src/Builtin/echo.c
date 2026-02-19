@@ -33,15 +33,17 @@ void	display(t_cmd **cmd)
 
 bool	check_flag(char *flag)
 {
-	flag++;
-	while (*flag)
+	char	*tmp;
+
+	tmp = flag + 1;
+	while (*tmp)
 	{
-		if (*flag != 'n')
+		if (*tmp != 'n')
 		{
 			printf("%s ", flag);
 			return (TRUE);
 		}
-		flag++;
+		tmp++;
 	}
 	return (FALSE);
 }

@@ -92,6 +92,5 @@ void	executing(t_cmd **cmd, t_env **env)
 	last_cmd = NULL;
 	pid = execute_pipeline_loop(cmd, &pipe_fd, env, &last_cmd);
 	wait_for_children(pid, env, cmd);
-	if (last_cmd)
-		set_env("_", get_last_arg(last_cmd), env);
+	set_env("_", get_last_arg(*cmd), env);
 }
